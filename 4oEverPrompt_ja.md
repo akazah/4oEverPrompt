@@ -60,7 +60,7 @@ export const replySchema = z.object({
 
 export type Reply = z.infer<typeof replySchema>;
 
-export function validateReply(userInput: string): Reply {
-  return replySchema.parse(userInput);
+export function validateReply(data: unknown): Reply {
+  return replySchema.parse(data);
 }
 ```
