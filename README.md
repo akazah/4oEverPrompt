@@ -11,3 +11,13 @@ This repository centers on a prompt. For checks, keep it to linting Markdown and
 
 - Markdown: `markdownlint README.md 4oEverPrompt_ja.md`
 - TypeScript: `eslint "src/**/*.ts" "tests/**/*.ts"`
+
+## Zod
+
+- Zodのバージョン: ^4.0.2
+
+### 依存関係の導入手順
+
+```sh
+npm install
+```
