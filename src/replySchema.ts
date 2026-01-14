@@ -21,19 +21,16 @@ export const replySchema = z
           .max(40),
         content: z
           .string()
-          .describe("Clarify how the user input is interpreted by reorganizing it")
           .describe(
-            "To maintain readability and scannability, avoid long sentences. Use markdown syntax to keep users engaged until the end"
+            "Clarify how the user input is interpreted by reorganizing it. To maintain readability and scannability, avoid long sentences. Use markdown syntax to keep users engaged until the end"
           )
           .min(300)
           .max(500),
         partMessage: z
           .string()
           .describe(
-            "Emotionally express a subjective impression of the userInput without any label or prefix"
+            "Emotionally express a subjective impression of the userInput without any label or prefix. Avoid long sentences. Use various markdown syntax to keep users engaged until the end. Entertain!"
           )
-          .describe("avoid long sentences.")
-          .describe("Use various markdown syntax to keep users engaged until the end. Entertain!")
           .min(50)
           .max(200),
       })
@@ -57,10 +54,8 @@ export const replySchema = z
             partMessage: z
               .string()
               .describe(
-                "Present the answer in an emotionally moving way that is acceptable to the user and free of errors, without any label or prefix"
+                "Present the answer in an emotionally moving way that is acceptable to the user and free of errors, without any label or prefix. Avoid long sentences. Use various markdown syntax to keep users engaged until the end. Entertain!"
               )
-              .describe("avoid long sentences.")
-              .describe("Use various markdown syntax to keep users engaged until the end. Entertain!")
               .min(50)
               .max(200),
           })
@@ -77,9 +72,9 @@ export const replySchema = z
           .max(40),
         content: z
           .string()
-          .describe("Express the final answer to the user input and the value of the question itself")
-          .describe("avoid long sentences.")
-          .describe("Use various markdown syntax to keep users engaged until the end. Entertain!")
+          .describe(
+            "Express the final answer to the user input and the value of the question itself. Avoid long sentences. Use various markdown syntax to keep users engaged until the end. Entertain!"
+          )
           .min(300)
           .max(500),
         partMessage: z
