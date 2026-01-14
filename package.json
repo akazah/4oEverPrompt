@@ -1,6 +1,6 @@
 {
   "name": "4oeverprompt",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "private": true,
   "dependencies": {
     "zod": "^4.0.2"
