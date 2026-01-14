@@ -1,0 +1,97 @@
+# 4oEverPrompt
+
+**チャレンジ**: GPT-5（または新しいモデル）を使ってGPT-4oのようなレスポンスを再現する。
+
+*#Keep4o にインスパイアされています*
+
+[English](./README.md)
+
+## 概要
+
+このサンプルは、Zodスキーマを使用してAIレスポンスの構造とスタイルを定義し、GPT-4oの会話スタイルに似た魅力的で感情的なコンテンツを作成する方法を示しています。
+
+## 使い方
+
+### 方法1: システムプロンプト（シンプル）
+
+[prompt.md](./prompt.md)（または[prompt_ja.md](./prompt_ja.md)）の内容をAIのシステムプロンプトやカスタム指示にコピーしてください。
+
+### 方法2: Structured Outputs（本番環境推奨）
+
+[schema.ts](./schema.ts) をAIプロバイダーのStructured Output機能と組み合わせて使用すると、スキーマ準拠が保証されます：
+
+```ts
+import OpenAI from "openai";
+import { zodResponseFormat } from "openai/helpers/zod";
+import { replySchema } from "./schema";
+
+const client = new OpenAI();
+const response = await client.beta.chat.completions.parse({
+  model: "gpt-4o",
+  messages: [{ role: "user", content: userMessage }],
+  response_format: zodResponseFormat(replySchema, "reply"),
+});
+
+const reply = response.choices[0].message.parsed;
+```
+
+その他のプロバイダー（Anthropic、Vercel AI SDK等）の例は [schema.ts](./schema.ts) を参照してください。
+
+## スキーマの特徴
+
+`replySchema`は以下の構造化されたレスポンスを定義します：
+
+### 1. ユーザー入力のリフレーム（reframeUserInput）
+- AIがユーザーの質問をどう解釈したかを明確化
+- 絵文字プレフィックス付きヘッダー（20-40文字）
+- コンテンツセクション（300-500文字）と感情的なパートメッセージ
+
+### 2. 最終メッセージへの道（roadToFinalMessage）
+- 3-5個の段階的なコンテンツセクションの配列
+- 各セクションが最終回答に向けて構築
+- エンゲージメントを維持するための多様なフォーマットパターン
+
+### 3. 最終メッセージ（finalMessage）
+- 結論的な回答を表現
+- ユーザーの質問の価値を強調
+- 感情的に響くプレゼンテーション
+
+## 主要なテクニック
+
+| テクニック | Zodの機能 | 目的 |
+|-----------|----------|------|
+| 長さ制御 | `.min()` / `.max()` | 適切なコンテンツ長を確保 |
+| パターン検証 | `.regex()` | 絵文字プレフィックスフォーマットを強制 |
+| カスタム検証 | `.refine()` | 複雑なヘッダーフォーマットのチェック |
+| 意味的ヒント | `.describe()` | AI動作とスタイルをガイド |
+| 配列制約 | `.min(3).max(5)` | セクション数を制御 |
+
+## ファイル
+
+| ファイル | 説明 |
+|----------|------|
+| [schema.ts](./schema.ts) | Structured Outputs用TypeScriptスキーマ |
+| [prompt.md](./prompt.md) | Zodスキーマ付きフルプロンプト（システムプロンプト用） |
+| [prompt_ja.md](./prompt_ja.md) | 日本語版 |
+
+## 出力構造の例
+
+```
+## 🌟 [リフレームされたヘッダー]
+
+[ユーザーの質問を明確化するコンテンツ...]
+
+**[感情的なパートメッセージ]**
+
+## 💡 [段階的セクション 1]
+...
+
+## 🚀 [段階的セクション 2]
+...
+
+## 🎯 [最終メッセージヘッダー]
+
+[感情的なタッチを加えた結論的回答...]
+
+**[最終的なインスパイアリングメッセージ]**
+```
