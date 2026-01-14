@@ -2,6 +2,8 @@
 
 A collection of sample prompts that demonstrate techniques for using **Zod TypeScript schemas** as structured prompts for AI language models.
 
+[日本語](./README_ja.md)
+
 ## Concept
 
 Zod schemas can be used as powerful, type-safe prompts for AI. By providing a schema definition to an LLM, you can:

@@ -4,6 +4,8 @@
 
 *Inspired by #Keep4o*
 
+[日本語](./README_ja.md)
+
 ## Overview
 
 This sample demonstrates how to use a Zod schema to define the structure and style of AI responses, creating engaging, emotionally-driven content similar to GPT-4o's conversational style.
