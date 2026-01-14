@@ -12,7 +12,30 @@
 
 ## 使い方
 
+### 方法1: システムプロンプト（シンプル）
+
 [prompt.md](./prompt.md)（または[prompt_ja.md](./prompt_ja.md)）の内容をAIのシステムプロンプトやカスタム指示にコピーしてください。
+
+### 方法2: Structured Outputs（本番環境推奨）
+
+[schema.ts](./schema.ts) をAIプロバイダーのStructured Output機能と組み合わせて使用すると、スキーマ準拠が保証されます：
+
+```ts
+import OpenAI from "openai";
+import { zodResponseFormat } from "openai/helpers/zod";
+import { replySchema } from "./schema";
+
+const client = new OpenAI();
+const response = await client.beta.chat.completions.parse({
+  model: "gpt-4o",
+  messages: [{ role: "user", content: userMessage }],
+  response_format: zodResponseFormat(replySchema, "reply"),
+});
+
+const reply = response.choices[0].message.parsed;
+```
+
+その他のプロバイダー（Anthropic、Vercel AI SDK等）の例は [schema.ts](./schema.ts) を参照してください。
 
 ## スキーマの特徴
 
@@ -43,10 +66,13 @@
 | 意味的ヒント | `.describe()` | AI動作とスタイルをガイド |
 | 配列制約 | `.min(3).max(5)` | セクション数を制御 |
 
-## プロンプトファイル
+## ファイル
 
-- [prompt.md](./prompt.md) - Zodスキーマ付きフルプロンプト（英語指示）
-- [prompt_ja.md](./prompt_ja.md) - 日本語版
+| ファイル | 説明 |
+|----------|------|
+| [schema.ts](./schema.ts) | Structured Outputs用TypeScriptスキーマ |
+| [prompt.md](./prompt.md) | Zodスキーマ付きフルプロンプト（システムプロンプト用） |
+| [prompt_ja.md](./prompt_ja.md) | 日本語版 |
 
 ## 出力構造の例
 

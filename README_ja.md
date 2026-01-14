@@ -16,6 +16,48 @@ Zodスキーマは、AIに対する強力で型安全なプロンプトとして
 
 このアプローチは、自由形式のAI生成と型安全なアプリケーション開発のギャップを埋めます。
 
+## Structured Outputs との併用
+
+本番環境では、AIプロバイダーが提供する**Structured Output**機能の使用を推奨します。これにより、レスポンスがZodスキーマに厳密に準拠することが保証されます：
+
+| プロバイダー | 機能 | 変換方法 |
+|-------------|------|----------|
+| **OpenAI** | [Structured Outputs](https://platform.openai.com/docs/guides/structured-outputs) | `openai/helpers/zod` の `zodResponseFormat()` |
+| **Anthropic** | [Tool Use](https://docs.anthropic.com/en/docs/build-with-claude/tool-use) | `zod-to-json-schema` の `zodToJsonSchema()` |
+| **Google** | [responseSchema](https://ai.google.dev/gemini-api/docs/json-mode) | `zodToJsonSchema()` |
+| **Vercel AI SDK** | [generateObject()](https://sdk.vercel.ai/docs/ai-sdk-core/generating-structured-data) | Zodネイティブサポート |
+
+### 例: OpenAI Structured Outputs
+
+```ts
+import OpenAI from "openai";
+import { zodResponseFormat } from "openai/helpers/zod";
+import { replySchema } from "./samples/4oEverPrompt/schema";
+
+const client = new OpenAI();
+const response = await client.beta.chat.completions.parse({
+  model: "gpt-4o",
+  messages: [{ role: "user", content: userMessage }],
+  response_format: zodResponseFormat(replySchema, "reply"),
+});
+
+const reply = response.choices[0].message.parsed; // Reply型として取得
+```
+
+### 例: Vercel AI SDK
+
+```ts
+import { generateObject } from "ai";
+import { openai } from "@ai-sdk/openai";
+import { replySchema } from "./samples/4oEverPrompt/schema";
+
+const { object } = await generateObject({
+  model: openai("gpt-4o"),
+  schema: replySchema,
+  prompt: userMessage,
+});
+```
+
 ## インストール
 
 ```sh

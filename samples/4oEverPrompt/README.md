@@ -12,7 +12,30 @@ This sample demonstrates how to use a Zod schema to define the structure and sty
 
 ## Usage
 
+### Option 1: System Prompt (Simple)
+
 Copy the contents of [prompt.md](./prompt.md) into your AI system prompt or custom instructions.
+
+### Option 2: Structured Outputs (Recommended for Production)
+
+Use [schema.ts](./schema.ts) with your AI provider's Structured Output feature for guaranteed schema compliance:
+
+```ts
+import OpenAI from "openai";
+import { zodResponseFormat } from "openai/helpers/zod";
+import { replySchema } from "./schema";
+
+const client = new OpenAI();
+const response = await client.beta.chat.completions.parse({
+  model: "gpt-4o",
+  messages: [{ role: "user", content: userMessage }],
+  response_format: zodResponseFormat(replySchema, "reply"),
+});
+
+const reply = response.choices[0].message.parsed;
+```
+
+See [schema.ts](./schema.ts) for more provider examples (Anthropic, Vercel AI SDK, etc.).
 
 ## Schema Features
 
@@ -43,10 +66,13 @@ The `replySchema` defines a structured response with:
 | Semantic hints | `.describe()` | Guides AI behavior and style |
 | Array constraints | `.min(3).max(5)` | Controls number of sections |
 
-## Prompt Files
+## Files
 
-- [prompt.md](./prompt.md) - Full prompt with Zod schema (English instructions)
-- [prompt_ja.md](./prompt_ja.md) - Original Japanese version
+| File | Description |
+|------|-------------|
+| [schema.ts](./schema.ts) | TypeScript schema for Structured Outputs |
+| [prompt.md](./prompt.md) | Full prompt with Zod schema (for system prompt use) |
+| [prompt_ja.md](./prompt_ja.md) | Japanese version |
 
 ## Example Output Structure
 
