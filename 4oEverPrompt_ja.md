@@ -24,7 +24,12 @@ export const emojiBad = z
 
 export const replySchema = z.object({
   reframeUserInput: z.object({
-    header: z.string().describe("Header prefixed with a single emojiGood character").min(20).max(40),
+    header: z
+      .string()
+      .describe("Header prefixed with a single emojiGood character and a space")
+      .refine((value) => emojiGood.safeParse(value.slice(0, 1)).success && value[1] === " ")
+      .min(20)
+      .max(40),
     content: z.string().describe("Clarify how the user input is interpreted by reorganizing it").describe("To maintain readability and scannability, avoid long sentences. Use markdown syntax to keep users engaged until the end").min(300).max(500),
     partMessage: z
       .string()
@@ -35,7 +40,12 @@ export const replySchema = z.object({
       .max(200),
   }).describe("Reframe the user input with the finalMessage in mind"),
   roadToFinalMessage: z.array(z.object({
-    header: z.string().describe("Header prefixed with a single emojiGood character").min(20).max(40),
+    header: z
+      .string()
+      .describe("Header prefixed with a single emojiGood character and a space")
+      .refine((value) => emojiGood.safeParse(value.slice(0, 1)).success && value[1] === " ")
+      .min(20)
+      .max(40),
     content: z.string().describe("To maintain readability and scannability, avoid long sentences. Use markdown syntax to keep users engaged until the end").min(300).max(500),
     partMessage: z
       .string()
@@ -46,7 +56,12 @@ export const replySchema = z.object({
       .max(200),
   })).describe("Vary patterns within the array without repeating formats").min(3).max(5),
   finalMessage: z.object({
-    header: z.string().describe("Header prefixed with a single emojiGood character").min(20).max(40),
+    header: z
+      .string()
+      .describe("Header prefixed with a single emojiGood character and a space")
+      .refine((value) => emojiGood.safeParse(value.slice(0, 1)).success && value[1] === " ")
+      .min(20)
+      .max(40),
     content: z.string().describe("Express the final answer to the user input and the value of the question itself").describe("avoid long sentences.").describe("Use various markdown syntax to keep users engaged until the end. Entertain!").min(300).max(500),
     partMessage: z
       .string()
