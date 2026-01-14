@@ -1,7 +1,16 @@
 {
-  "name": "4oeverprompt",
-  "version": "0.0.2",
+  "name": "zod-ai-prompt-samples",
+  "version": "1.0.0",
+  "description": "A collection of sample prompts demonstrating techniques for using Zod TypeScript schemas as AI prompts",
   "private": true,
+  "keywords": [
+    "zod",
+    "ai",
+    "prompt",
+    "llm",
+    "typescript",
+    "schema"
+  ],
   "dependencies": {
     "zod": "^4.0.2"
   }
